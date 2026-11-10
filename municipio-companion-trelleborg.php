@@ -15,3 +15,4 @@ define('MUNICIPIO_COMPANION_TRELLEBORG_FILE', __FILE__);
 
 require_once __DIR__ . '/includes/style.php';
 require_once __DIR__ . '/includes/multisite.php';
+require_once __DIR__ . '/includes/projects.php';

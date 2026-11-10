@@ -13,3 +13,4 @@ function municipio_companion_trelleborg_print_upgrade_insecure_requests()
 add_action('wp_head', 'municipio_companion_trelleborg_print_upgrade_insecure_requests', 1);
 // admin_head runs after the admin stylesheets are printed, so the tag must come before print_admin_styles (priority 20).
 add_action('admin_print_styles', 'municipio_companion_trelleborg_print_upgrade_insecure_requests', 0);
+
