@@ -25,7 +25,10 @@ Note: the WordPress Customizer's "Additional CSS" is printed later in `wp_head` 
 
 ### Upgrade insecure requests
 
-Prints `<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">` early in `wp_head` (priority 1).
+Prints `<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">` early in the `<head>`:
+
+- Frontend: `wp_head`, priority 1.
+- wp-admin: `admin_print_styles`, priority 0. `admin_head` is too late, since it runs after the admin stylesheets are printed and the meta tag only affects requests that come after it.
 
 In the multisite setup, some asset URLs (for example fonts) are generated with `http://` while the site is served over `https://`. Browsers block these as mixed content. The meta tag makes the browser request them over HTTPS instead.
 
