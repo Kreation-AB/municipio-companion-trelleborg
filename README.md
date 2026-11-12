@@ -11,6 +11,7 @@ municipio-companion-trelleborg.php   Plugin header, loads includes/
 includes/style.php                   Municipio style adjustments
 includes/multisite.php               Upgrade insecure requests
 includes/projects.php                Project post type and taxonomies (Trelleborg Växer only)
+includes/query-performance.php       Remove duplicated meta query clauses in Posts module queries
 assets/css/municipio-adjustments.css CSS overrides for Municipio
 ```
 
@@ -32,6 +33,16 @@ Prints `<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-req
 - wp-admin: `admin_print_styles`, priority 0. `admin_head` is too late, since it runs after the admin stylesheets are printed and the meta tag only affects requests that come after it.
 
 In the multisite setup, some asset URLs (for example fonts) are generated with `http://` while the site is served over `https://`. Browsers block these as mixed content. The meta tag makes the browser request them over HTTPS instead.
+
+### Remove duplicated meta query clauses
+
+Workaround for slow posts modules for logged-in users. Municipio's `RestrictPrivatePostToUserGroup` adds a `user-group-visibility` clause to `meta_query` on every `pre_get_posts` (priority 1), and Modularity's Posts module runs the same `WP_Query` twice. The second run gets the clause twice, which joins `wp_postmeta` four times and makes the query grow with the square of the meta rows per post (over 2 s per posts module in production).
+
+Only Posts module queries are touched. The module's args filter `Modularity/Module/Posts/GetPosts/Args` adds the query var `municipio_companion_trelleborg_posts_module` to its query. A `pre_get_posts` callback at priority 2 then removes, for marked queries only, unnamed `meta_query` clauses that are exact duplicates of an earlier clause. The result is unchanged, since both "A AND A" and "A OR A" equal "A". Named clauses (used by `orderby`) are kept, and queries without duplicates are not touched. The module's sticky posts query does not pass the args filter and is not marked, but it only fetches a few posts by ID and stays cheap.
+
+If Municipio renames or removes the `Modularity/Module/Posts/GetPosts/Args` filter, the workaround silently stops working and Posts modules become slow for logged-in users again.
+
+Can be removed when Municipio no longer adds the clause twice.
 
 ### Projects (Trelleborg Växer)
 
