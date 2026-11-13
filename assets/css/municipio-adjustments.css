@@ -1,1 +1,103 @@
 /* Adjustments to Municipio. Loaded after all other enqueued styles. */
+@layer theme {
+    .c-header.c-header--flexible .c-header__brand-text {
+        font-size: 20px !important;
+    }
+
+
+    .t-customsearchpage { margin-top: 0; }
+
+    .search-index-page {
+        background: none !important;
+        overflow: visible !important;
+        box-shadow: none !important;
+    }
+    .search-index-page__toolbar { padding: 0; margin: 0 !important; }
+    .search-index-page__facets {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: none !important;
+    }
+    .search-index-page__results { margin: 0; padding: 0 !important; }
+
+    /* Filter chips ("Innehållstyp: Sidor (58)  Nyheter (7) …") */
+    .search-index-page__facet {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: calc(var(--base, 8px) * 1) !important;
+
+        legend {
+            width: 100%;
+            margin-bottom: calc(var(--base, 8px) * 0.5) !important;
+
+            font-size: 0.9rem !important;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0;
+            &::after { content: ":"; }
+        }
+        input {
+            width: inherit !important;
+            height: inherit !important;
+            accent-color: var(--color--primary);
+        }
+        label {
+            display: flex;
+            align-items: center !important;
+            gap: calc(var(--base, 8px) * 0.75) !important;
+            padding: 0.25rem 0.75rem;
+            border-radius: calc(var(--base, 8px) * 0.5);
+            background: var(--color--primary);
+            color: #ffffff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
+
+            &:hover { background: color-mix(in srgb, var(--color--primary) 75%, var(--color--secondary)); }
+            &:has(input:checked) { background: var(--color--secondary); color: #ffffff; }
+            &:has(input:focus-visible) { outline: 3px solid var(--color--secondary); outline-offset: 2px; }
+        }
+    }
+
+    body.search .search-index-page__media img { object-position: center top !important; }
+
+    /* Pagination: 44px targets, current page navy */
+    .search-index-page__pagination button {
+        min-width: 44px;
+        height: 44px;
+        padding: 0 calc(var(--base, 8px) * 1.5) !important;
+        border: 1px solid var(--viva-border-color-alt) !important;
+        border-radius: calc(var(--base, 8px) * 0.5);
+        background: #ffffff !important;
+        color: var(--color--secondary) !important;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
+
+        &:hover { background: var(--color--primary) !important; }
+        &[aria-current="true"] {
+            background: var(--color--secondary) !important;
+            border-color: var(--color--secondary) !important;
+            color: #ffffff !important;
+        }
+        &:focus-visible { outline: 3px solid var(--color--secondary); outline-offset: 2px; }
+    }
+
+    /* Desktop: filters above the results, chips on one row */
+    @media (min-width: 896px) {
+        .search-index-page__layout { display: block !important; }
+        .search-index-page__facet {
+            margin: calc(var(--base, 8px) * 2) 0 calc(var(--base, 8px) * 4) !important;
+            legend {
+                float: left;
+                width: auto;
+                margin-bottom: 0 !important;
+                padding-top: 3px;
+                padding-right: calc(var(--base, 8px) * 1);
+            }
+        }
+        .search-index-page__pagination { justify-content: center; }
+    }
+}
+
