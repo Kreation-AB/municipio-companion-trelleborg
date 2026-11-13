@@ -12,6 +12,7 @@ includes/style.php                   Municipio style adjustments
 includes/multisite.php               Upgrade insecure requests
 includes/projects.php                Project post type and taxonomies (Trelleborg Växer only)
 includes/query-performance.php       Remove duplicated meta query clauses in Posts module queries
+includes/page-excerpt.php            Excerpt support for pages
 assets/css/municipio-adjustments.css CSS overrides for Municipio
 ```
 
@@ -24,6 +25,20 @@ Loads `assets/css/municipio-adjustments.css` on the frontend, after all other en
 The stylesheet handle is `municipio-adjustments`. The version is the file's modification time, so browsers fetch the new file after every change. Municipio's `CacheBust` helper is not used, because it only resolves files listed in the theme's build manifest.
 
 Note: the WordPress Customizer's "Additional CSS" is printed later in `wp_head` and can still override these rules.
+
+All rules are wrapped in `@layer theme` and use native CSS nesting, `:has()` and `color-mix()`.
+
+Current adjustments:
+
+- **Header:** fixed font size for the brand text in the flexible header.
+- **Search page** (`.search-index-page`, Municipio's `SearchIndex` search page):
+  - Removes the default background, shadow, margins and padding around the toolbar, filters and results.
+  - Filters (facets) are shown as clickable chips in the primary color, with a secondary color for checked options, a hover state and a visible focus outline. The facet legend gets a trailing colon.
+  - Pagination buttons are at least 44×44 px, and the current page is highlighted in the secondary color.
+  - Result images are cropped from the top (`object-position: center top`).
+  - From 896 px width, the filters are placed above the results instead of beside them, with the legend and chips on one row, and the pagination is centered.
+
+The search page rules depend on Municipio's class names. If Municipio changes the search page markup, review them.
 
 ### Upgrade insecure requests
 
@@ -43,6 +58,12 @@ Only Posts module queries are touched. The module's args filter `Modularity/Modu
 If Municipio renames or removes the `Modularity/Module/Posts/GetPosts/Args` filter, the workaround silently stops working and Posts modules become slow for logged-in users again.
 
 Can be removed when Municipio no longer adds the clause twice.
+
+### Excerpt on pages
+
+Adds `excerpt` support to the `page` post type on `init`. WordPress core only enables excerpts for posts, and Municipio's "Post type functions" setting only applies to custom post types created through Municipio, not to the built-in pages.
+
+In the classic editor the excerpt box may be hidden by default; enable it under Screen Options.
 
 ### Projects (Trelleborg Växer)
 
