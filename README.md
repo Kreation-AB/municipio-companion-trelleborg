@@ -13,6 +13,7 @@ includes/multisite.php               Upgrade insecure requests
 includes/projects.php                Project post type and taxonomies (Trelleborg Växer only)
 includes/query-performance.php       Remove duplicated meta query clauses in Posts module queries
 includes/page-excerpt.php            Excerpt support for pages
+includes/news-labels.php             Rename posts to "Nyheter"
 assets/css/municipio-adjustments.css CSS overrides for Municipio
 ```
 
@@ -64,6 +65,18 @@ Can be removed when Municipio no longer adds the clause twice.
 Adds `excerpt` support to the `page` post type on `init`. WordPress core only enables excerpts for posts, and Municipio's "Post type functions" setting only applies to custom post types created through Municipio, not to the built-in pages.
 
 In the classic editor the excerpt box may be hidden by default; enable it under Screen Options.
+
+### Posts renamed to "Nyheter"
+
+Replaces the labels of the built-in `post` post type with Swedish news labels ("Nyheter", "Nyhet", "Lägg till nyhet", …) through the `post_type_labels_post` filter. Applies on every site where the plugin is active. Municipio has no setting for this; it can only hide the post type.
+
+Only labels change: the post type name `post`, permalinks and stored content are untouched.
+
+The labels show up in wp-admin and wherever Municipio prints the post type label. On a single post, Municipio's breadcrumb (`AppendArchiveMenuItem`) uses the option `page_for_post`, which WordPress never sets for posts (the core option is `page_for_posts`), and falls back to the post type label. The breadcrumb therefore shows "Nyheter". If Municipio starts reading the posts page title instead, the breadcrumb shows that page's title.
+
+Municipio's search index stores the label as `post_type_name` when a post is indexed (a facet on the search page). Posts indexed before this change keep "Inlägg" until they are reindexed.
+
+The labels are hardcoded in Swedish and are not translatable.
 
 ### Projects (Trelleborg Växer)
 
