@@ -14,6 +14,7 @@ includes/projects.php                Project post type and taxonomies (Trellebor
 includes/query-performance.php       Remove duplicated meta query clauses in Posts module queries
 includes/page-excerpt.php            Excerpt support for pages
 includes/news-labels.php             Rename posts to "Nyheter"
+includes/form-builder-translations.php Load Modularity Form Builder translations
 assets/css/municipio-adjustments.css CSS overrides for Municipio
 ```
 
@@ -77,6 +78,19 @@ The labels show up in wp-admin and wherever Municipio prints the post type label
 Municipio's search index stores the label as `post_type_name` when a post is indexed (a facet on the search page). Posts indexed before this change keep "Inlägg" until they are reindexed.
 
 The labels are hardcoded in Swedish and are not translatable.
+
+### Modularity Form Builder translations
+
+Workaround for missing Swedish texts in Modularity Form Builder forms, for example "I consent" instead of "Jag godkänner" on the GDPR checkbox. The plugin ships a correct Swedish translation, but it is never used:
+
+- Form Builder calls `load_plugin_textdomain()` on `init`, but its ACF field import on `plugins_loaded` (priority 10) already calls `__()` with the same textdomain.
+- WordPress then loads the translation just in time, resolves the wrong directory (the plugin root instead of `languages/`) and caches it. The later `load_plugin_textdomain()` call does not change the cached directory.
+
+This plugin calls `load_plugin_textdomain('modularity-form-builder', false, 'modularity-form-builder/languages')` on `plugins_loaded` with priority 9, so the path is registered before the ACF import.
+
+- Applies on every site where this plugin is active. Sites with Form Builder but without this plugin still show English texts.
+- Affects Form Builder 4.0.16 (installed) up to at least 4.0.30 (latest when this was written). Municipio does not handle it either.
+- Remove `includes/form-builder-translations.php` when Form Builder loads its textdomain before the ACF import.
 
 ### Projects (Trelleborg Växer)
 

@@ -19,3 +19,4 @@ require_once __DIR__ . '/includes/projects.php';
 require_once __DIR__ . '/includes/query-performance.php';
 require_once __DIR__ . '/includes/page-excerpt.php';
 require_once __DIR__ . '/includes/news-labels.php';
+require_once __DIR__ . '/includes/form-builder-translations.php';
