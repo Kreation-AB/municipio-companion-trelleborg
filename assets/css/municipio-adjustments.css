@@ -99,5 +99,14 @@
         }
         .search-index-page__pagination { justify-content: center; }
     }
+
+    /* Card signature adjustments */
+    .c-card__body .c-signature {
+	    padding-top: 6px;
+    }
+
+    .c-card__body .c-signature__avatar {
+	    display: none;
+    }
 }
 
